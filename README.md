@@ -1,0 +1,2 @@
+# ethDB
+ethereum-based database
