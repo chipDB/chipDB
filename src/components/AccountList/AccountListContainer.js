@@ -11,7 +11,7 @@ MetaCoin.setProvider(provider);
 class AccountListContainer extends Component {
   constructor(props) {
     super(props)
-
+console.log('theirs',provider);
     this.state = {
       accounts: [],
       coinbase: ''
