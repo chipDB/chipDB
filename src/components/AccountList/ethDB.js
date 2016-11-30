@@ -20,7 +20,11 @@ ethDb.setProvider(provider);
 class EthDb extends Component {
   constructor(props){
     super(props);
-
+    this.state = {
+      mainAccount: '',
+      tableData: [],
+      tableWidth: 3
+    }
 
     // console.log('Web3', Web3);
     //const gasPrice = Web3.eth.gasPrice;
@@ -49,33 +53,81 @@ class EthDb extends Component {
     console.log(provider);
   }
 
-  _getAccountBalances () {
+  _readAll () {
     const self = this;
     const eth = ethDb.deployed();
-    this.props.web3.eth.getAccounts(function (err, accs) {
-      
-      console.log('account: ', accs[0]);
-
-      eth.createSchema(['jimmy','cat','nick2'], {from: accs[0] , gas: 4700000}).then((val) => {
-      console.log('Return Val: ', val);
       eth.readAll.call().then((value)=> {
-        value.forEach((item, i) => {
-          console.log(i, self.props.web3.toAscii(item));
-        });
-        console.log('return data', value);
+        const result = value.reduce((acc, val, i, arr) => {
+          if(i % self.state.tableWidth === 0) acc.push([]);
+          acc[acc.length - 1].push(self.props.web3.toAscii(val));
+          return acc;
+        }, []);
+        self.setState({tableData: result}, function(){console.log('return statedata', self.state.tableData)});
       });
-    });
-  });
   }
+
+  _getMainAccount () {
+    this.props.web3.eth.getAccounts((err, accs) => {
+      console.log('account: ', accs[0]);
+      this.setState({mainAccount: accs[0]}, this._createSchema);
+    });
+  }
+
+  _createSchema () {
+    const self = this;
+    const eth = ethDb.deployed();
+      eth.createSchema(['first','last','address'], {from: this.state.mainAccount, gas: 4700000}).then((val) => {
+      console.log('Return Schema: ', val);
+      self._createRow();
+      });
+  }
+
+  _createRow () {
+    const self = this;
+    const eth = ethDb.deployed();
+      eth.create(['jimmy','johns','15th Street'], {from: this.state.mainAccount, gas: 4700000}).then((val) => {
+      console.log('Return Row: ', val);
+      self._readAll();
+      });
+  }
+
+  // _updateRow () {
+  //   const self = this;
+  //   const eth = ethDb.deployed();
+  //     eth.create(['jimmy','johns','15th Street'], {from: this.state.mainAccount, gas: 4700000}).then((val) => {
+  //     console.log('Return Row: ', val);
+  //     });
+  // }
+
+  // _deleteRow () {
+  //   const self = this;
+  //   const eth = ethDb.deployed();
+  //     eth.create(['jimmy','johns','15th Street'], {from: this.state.mainAccount, gas: 4700000}).then((val) => {
+  //     console.log('Return Row: ', val);
+  //     });
+  // }
 
   componentDidMount() {
-    this._getAccountBalances();
+    this._getMainAccount();
   }
   
+  render() {
+    return (
+      <table>
+        <thead>
+          <tr><td>FirstName</td><td>LastName</td><td>Address</td></tr>
+        </thead>
+        <tbody>
+          {this.state.tableData.map(this.renderAccount)}
+        </tbody>
+      </table>
+    )
+  }
 
-  render(){
-    return <div>Test</div>
+  renderAccount(row, ind) {
+    return <tr key={ind}><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td></tr>
   }
 }
+
 
 export default EthDb
