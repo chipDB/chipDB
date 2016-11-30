@@ -3,8 +3,13 @@ pragma solidity ^0.4.0;
 contract EthDb {
 
   bytes32[][] tbl;
-  bytes32[] tblEntry;
+  // bytes32[] tblEntry;
   bytes32[] tblTemp;
+
+  // Test
+  function test () returns (string) {
+    return 'Boom!';
+  }
 
   // // Create
   function create (bytes32[] newRow) {
@@ -13,7 +18,6 @@ contract EthDb {
   }
 
   //Schema
-
   function createSchema (bytes32[] newRow) {
     if (tbl.length > 0) { return; }
     tbl.push(newRow);
