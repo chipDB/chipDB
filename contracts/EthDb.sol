@@ -31,8 +31,26 @@ contract EthDb {
 	}
 
   // // Edit
-  function update (uint row, uint col, bytes32 value) {
-		tbl[row][col] = value;
+
+  function update (bytes32 searchColName, bytes32 searchVal, bytes32 colName, bytes32 value) {
+    int8 searchIndex = -1;
+    int8 changeIndex = -1;
+
+    for (uint i = 0; i < tbl[0].length; i++) {
+      if (tbl[0][i] == searchColName) {
+        searchIndex = int8(i);
+      }
+      if(tbl[0][i] == colName) {
+        changeIndex = int8(i);
+      }
+    }
+   if (searchIndex == -1 || changeIndex == -1) { return; }
+
+    for (uint j = 1; j < tbl.length; j++) {
+      if (tbl[j][uint(searchIndex)] == searchVal) {
+        tbl[j][uint(changeIndex)] = value;
+      }
+    }
 	}
 
   function tblLength () returns(uint) {
@@ -41,8 +59,25 @@ contract EthDb {
 
   // Delete:
   // http://ethereum.stackexchange.com/questions/1527/how-to-delete-an-element-at-a-certain-index-in-an-array
+function remove(bytes32 searchColName, bytes32 searchVal)  returns(uint[]) {
+    int8 columnIndex = -1;
 
-  function remove(uint index)  returns(uint[]) {
+    for (uint i = 0; i < tbl[0].length; i++) {
+      if (tbl[0][i] == searchColName) {
+        columnIndex = int8(i);
+      }
+    }
+    if (columnIndex == -1) return;
+
+    for(uint j = 1; j < tbl.length; j++) {
+      if(tbl[j][uint(columnIndex)] == searchVal) {
+        removeHelper(j);
+        j--;
+      }
+    }
+  }
+
+  function removeHelper(uint index)  returns(uint[]) {
     if (index >= tbl.length) return;
 
     for (uint i = index; i<tbl.length-1; i++){
