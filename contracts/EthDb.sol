@@ -23,6 +23,11 @@ contract EthDb {
     tbl.push(newRow);
   }
 
+  //Get Schema for width and rendering
+  function getTableWidth () returns (uint) {
+    return tbl[0].length;
+  }
+
   // // Read
 	function readAll () returns(bytes32[] x) {
 		for (uint i = 0; i < tbl.length; i++) {
