@@ -69,8 +69,10 @@ class EthDb extends Component {
   }
 
   _getMainAccount () {
+    console.log('_getMainAccount called');
     this.props.web3.eth.getAccounts((err, accs) => {
       console.log('account: ', accs[0]);
+      this.props.web3.eth.defaultAccount = accs[0];
       this.setState({mainAccount: accs[0]}, this._createSchema);
     });
   }
@@ -98,22 +100,18 @@ class EthDb extends Component {
       self._readAll();
       });
   }
-  // _createRow () {
-  //   const self = this;
-  //   const eth = ethDb.deployed();
-  //     eth.create(['jimmy','johns','15th Street'], {from: this.state.mainAccount, gas: 4700000}).then((val) => {
-  //     console.log('Return Row: ', val);
-  //     self._readAll();
-  //     });
-  // }
 
-  // _updateRow () {
-  //   const self = this;
-  //   const eth = ethDb.deployed();
-  //     eth.create(['jimmy','johns','15th Street'], {from: this.state.mainAccount, gas: 4700000}).then((val) => {
-  //     console.log('Return Row: ', val);
-  //     });
-  // }
+  _updateRow (searchColName, searchVal, colName, value) {
+    const self = this;
+    const eth = ethDb.deployed();
+ 
+    
+    console.log(searchColName, searchVal, colName, value);
+    eth.update(searchColName, searchVal, colName, value, {from: this.state.mainAccount, gas: 4700000}).then((val) => {
+      self._readAll();
+      console.log('return val', self.props.web3.toAscii(val));
+    });
+  }
 
   // _deleteRow () {
   //   const self = this;
@@ -128,6 +126,7 @@ class EthDb extends Component {
   }
   
   render() {
+    console.log('Rendered!');
     if(this.state.tableData.length === 0) return null; 
     return (
       <div>
@@ -150,21 +149,40 @@ class EthDb extends Component {
           <label htmlFor='address'>Address</label>
           <input id='address' className='SendAmount' type='text' ref={(i) => { if(i) { this.address = i}}} />
           <br/>
-          <button className='SendBtn' onClick={this.handleSendMeta.bind(this)}>Send</button>
+          <button className='SendBtn' onClick={this.handleCreate.bind(this)}>Send</button>
+        </form>
+        <form className='SendCoin'>
+          <label htmlFor='search_column'>Search Column</label>
+          <input id='search_column' className='RecipientAddress' type='text' ref={(i)=>{ if(i) { this.search_column = i}}} />
+          <label htmlFor='search_value'>Search Value</label>
+          <input id='search_value' className='SendAmount' type='text' ref={(i) => { if(i) { this.search_value = i}}} />
+          <label htmlFor='column_to_update'>Column To Update</label>
+          <input id='column_to_update' className='SendAmount' type='text' ref={(i) => { if(i) { this.column_to_update = i}}} />
+          <label htmlFor='update_value'>Update Value</label>
+          <input id='update_value' className='SendAmount' type='text' ref={(i) => { if(i) { this.update_value = i}}} />
+          <br/>
+          <button className='SendBtn' onClick={this.handleUpdate.bind(this)}>Send</button>
         </form>
       </div>
     )
   }
 
 
- handleSendMeta(e) {
+ handleCreate(e) {
     e.preventDefault()
-    console.log('this', this)
-    console.log('lastname', this.lastName.value)
     this._createRow([this.firstName.value, this.lastName.value, this.address.value]);
     this.firstName.value = '';
     this.lastName.value = '';
     this.address.value = '';
+  }
+
+  handleUpdate(e) {
+    e.preventDefault()
+    this._updateRow([this.search_column.value, this.search_value.value, this.column_to_update.value, this.update_value.value]);
+    this.search_column.value = '';
+    this.search_value.value = '';
+    this.column_to_update.value = '';
+    this.update_value.value = '';
   }
   renderHeader(data, ind){
     return <td key={ind}>{data}</td>
