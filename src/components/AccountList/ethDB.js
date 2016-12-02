@@ -104,22 +104,18 @@ class EthDb extends Component {
   _updateRow (searchColName, searchVal, colName, value) {
     const self = this;
     const eth = ethDb.deployed();
- 
-    
-    console.log(searchColName, searchVal, colName, value);
     eth.update(searchColName, searchVal, colName, value, {from: this.state.mainAccount, gas: 4700000}).then((val) => {
       self._readAll();
-      console.log('return val', self.props.web3.toAscii(val));
     });
   }
 
-  // _deleteRow () {
-  //   const self = this;
-  //   const eth = ethDb.deployed();
-  //     eth.create(['jimmy','johns','15th Street'], {from: this.state.mainAccount, gas: 4700000}).then((val) => {
-  //     console.log('Return Row: ', val);
-  //     });
-  // }
+  _deleteRow (searchColName, searchVal) {
+    const self = this;
+    const eth = ethDb.deployed();
+      eth.remove(searchColName, searchVal, {from: this.state.mainAccount, gas: 4700000}).then((val) => {
+        self._readAll();
+      });
+  }
 
   componentDidMount() {
     this._getMainAccount();
@@ -163,6 +159,14 @@ class EthDb extends Component {
           <br/>
           <button className='SendBtn' onClick={this.handleUpdate.bind(this)}>Send</button>
         </form>
+        <form className='SendCoin'>
+          <label htmlFor='delete_column'>Search Column</label>
+          <input id='delete_column' className='RecipientAddress' type='text' ref={(i)=>{ if(i) { this.delete_column = i}}} />
+          <label htmlFor='delete_value'>Search Value</label>
+          <input id='delete_value' className='SendAmount' type='text' ref={(i) => { if(i) { this.delete_value = i}}} />
+          <br/>
+          <button className='SendBtn' onClick={this.handleDelete.bind(this)}>Send</button>
+        </form>
       </div>
     )
   }
@@ -178,12 +182,22 @@ class EthDb extends Component {
 
   handleUpdate(e) {
     e.preventDefault()
-    this._updateRow([this.search_column.value, this.search_value.value, this.column_to_update.value, this.update_value.value]);
+    this._updateRow(this.search_column.value, this.search_value.value, this.column_to_update.value, this.update_value.value);
     this.search_column.value = '';
     this.search_value.value = '';
     this.column_to_update.value = '';
     this.update_value.value = '';
   }
+
+  handleDelete(e) {
+    e.preventDefault()
+    this._deleteRow(this.delete_column.value, this.delete_value.value);
+    this.delete_column.value = '';
+    this.delete_value.value = '';
+  }
+
+
+
   renderHeader(data, ind){
     return <td key={ind}>{data}</td>
   }

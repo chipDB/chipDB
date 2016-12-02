@@ -41,13 +41,9 @@ contract EthDb {
 
   // // Edit
 
-  function update (bytes32[] args) {
+  function update (bytes32 searchColName, bytes32 searchVal, bytes32 colName, bytes32 value) {
     int8 searchIndex = -1;
     int8 changeIndex = -1;
-    bytes32 searchColName = args[0]; 
-    bytes32 searchVal = args[1]; 
-    bytes32 colName = args[2]; 
-    bytes32 value = args[3]; 
 
     for (uint i = 0; i < tbl[0].length; i++) {
       if (tbl[0][i] == searchColName) {
@@ -72,10 +68,8 @@ contract EthDb {
 
   // Delete:
   // http://ethereum.stackexchange.com/questions/1527/how-to-delete-an-element-at-a-certain-index-in-an-array
-function remove(bytes32[] args)  returns(uint[]) {
+function remove(bytes32 searchColName, bytes32 searchVal) {
     int8 columnIndex = -1;
-    bytes32 searchColName = args[0];
-    bytes32 searchVal = args[1];
 
     for (uint i = 0; i < tbl[0].length; i++) {
       if (tbl[0][i] == searchColName) {
