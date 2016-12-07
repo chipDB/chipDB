@@ -171,7 +171,6 @@ class EthDb extends Component {
     )
   }
 
-
  handleCreate(e) {
     e.preventDefault()
     this._createRow([this.firstName.value, this.lastName.value, this.address.value]);
