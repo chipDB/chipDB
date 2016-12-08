@@ -1,13 +1,18 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
-import Web3 from 'web3'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import Web3 from 'web3';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import ReduxPromise from 'redux-promise';
+import reducers from './reducers';
+import { Router, Route, Link, browserHistory } from 'react-router';
 
-import './index.css'
+import './index.css';
 
-import truffleConfig from '../truffle.js'
+import truffleConfig from '../truffle.js';
 
-var web3Location = `http://${truffleConfig.rpc.host}:${truffleConfig.rpc.port}`
+var web3Location = `http://${truffleConfig.rpc.host}:${truffleConfig.rpc.port}`;
 
 window.addEventListener('load', function() {                    
   var web3Provided;
@@ -17,11 +22,20 @@ window.addEventListener('load', function() {
     // eslint-disable-next-line                       
     web3Provided = new Web3(web3.currentProvider);               
   } else {                                                      
-    web3Provided = new Web3(new Web3.providers.HttpProvider(web3Location))
+    web3Provided = new Web3(new Web3.providers.HttpProvider(web3Location));
   }   
   
+  const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+
+//BROWSER HISTORY ONE DAY SOON
   ReactDOM.render(
-    <App web3={web3Provided} />,
+    <Provider store={createStoreWithMiddleware(reducers)}>
+      <Router history={browserHistory}>
+        <Route path='/login' web3={web3Provided} component={App}/>
+        <Route path='/'/>
+        <Route path='/:table'/>
+      </Router>
+    </Provider>,
     document.getElementById('root')
   )                                                                                                                    
 });
