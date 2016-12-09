@@ -2,36 +2,44 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { setActiveAccount } from '../actions/activeAccount';
 import { bindActionCreators } from 'redux';
-import { getMainAccount } from '../actions/getMainAccount';
+import { getAccounts } from '../actions/getAccounts';
+import { Link } from 'react-router';
 
 class LoginForm extends Component {
-
   handleSubmit (event) {
     event.preventDefault();
-    var forms = document.forms.accountEntry;
-    this.props.setActiveAccount(forms.accountInput.value);
-    console.log('this.props.activeAccount', this.props.activeAccount);
+    const forms = document.forms.accountEntry;
+    const value = forms.accountInput.value;
+    const account = this.props.Accounts.Accounts
+    
+    
+    // if (account.indexOf(value) === -1) {
+    //   console.log('Error!');
+    // }
+    
+   this.props.setActiveAccount(value);
   }
 
   componentDidMount () {
-    const self = this;
-
-    const accountPromise = new Promise(
-      function(resolve, reject) {
-        self.props.web3.eth.getAccounts((err, accs) => {
-          if(err) return reject(err);
-          resolve(accs);
-        }) 
-      })
-    this.props.getMainAccount(accountPromise);
+    if (!this.props.Accounts) {
+      const accountPromise = new Promise(
+        (resolve, reject) => {
+          this.props.route.web3.eth.getAccounts((err, accs) => {
+            if(err) return reject(err);
+            resolve(accs);
+          }) 
+        });
+      
+      this.props.getAccounts(accountPromise);
+    }
   }
 
   render () {
-    console.log('render',this.props.mainAccount.mainAccount); //TODO: UNNEST THIS
+    console.log('Props on Login:', this.props);
     return (
       <div>
         <form name="accountEntry" onSubmit={this.handleSubmit.bind(this)}>
-          <input name="accountInput" value={this.props.mainAccount.mainAccount[0]}/>
+          <input name="accountInput"/>
           <button className="btn btn-default">Submit</button>
         </form>
       </div>
@@ -39,15 +47,12 @@ class LoginForm extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    activeAccount: state.activeAccount,
-    mainAccount: state.mainAccount
-  }
+function mapStateToProps({activeAccount, Accounts}) {
+  return { activeAccount, Accounts };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({setActiveAccount, getMainAccount}, dispatch);
+  return bindActionCreators({setActiveAccount, getAccounts}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
