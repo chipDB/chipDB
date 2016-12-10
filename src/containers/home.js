@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { setActiveAccount } from '../actions/activeAccount';
-import { bindActionCreators } from 'redux';
 import { getAccounts } from '../actions/getAccounts';
 import { Link } from 'react-router';
 
