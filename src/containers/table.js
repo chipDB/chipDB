@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+//import { Link } from 'react-router';
 import { getTableData } from '../actions/getTableData';
 import { bindActionCreators } from 'redux';
 import { web3, ethDb } from '../web3Controller';
@@ -19,15 +19,10 @@ class Table extends Component {
     });
   }
 
-  createRow() {
-
-  }
-
   _renderHeader(data) {
-    console.log('predata',data);
     if(!data.length) return;
-    return data[0].map( (ele, ind) => {
-      return <td key={ind}>{ele.toUpperCase()}</td>
+    return data[0].map((el, ind) => {
+      return <td key={ind}>{el.toUpperCase()}</td>
     });
   }
 
@@ -37,11 +32,10 @@ class Table extends Component {
       <div>
         <table className='table'>
           <thead>
-            <tr>{}</tr>
+            <tr></tr>
             <tr>{this._renderHeader(this.props.tableData.tableData)}</tr>
           </thead>
           <tbody>
-            {}
           </tbody>
         </table>
       </div>

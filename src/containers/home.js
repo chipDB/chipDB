@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setActiveAccount } from '../actions/activeAccount';
-import { getAccounts } from '../actions/getAccounts';
+//import { setActiveAccount } from '../actions/activeAccount';
+//import { getAccounts } from '../actions/getAccounts';
 import { Link } from 'react-router';
 import ethDb from '../../contracts/EthDb.sol';
 
@@ -12,20 +12,15 @@ class Home extends Component {
   }
 
   _createSchema() {
-    const self = this;
     const eth = ethDb.deployed();
-    const eth2 = ethDb.deployed();
-      eth.createSchema(['first','last','address'], {from: this.props.activeAccount, gas: 4700000}).then((val) => {
+    
+    eth.createSchema(['first','last','address'], {from: this.props.activeAccount, gas: 4700000}).then((val) => {
       console.log('Return Schema: ', val);
-      });
-      eth2.createSchema(['first2','last2','address2'], {from: this.props.activeAccount, gas: 4700000}).then((val) => {
-      console.log('Return Schema: ', val);
-      });
+    });
+
   }
 
   render () {
-    console.log('Props on Home:', this.props);
-
     return (
       <div>
         <Link to='/table'>Table</Link>
@@ -34,8 +29,8 @@ class Home extends Component {
   }
 }
 
-function mapStateToProps({activeAccount}) {
-  return { activeAccount };
+function mapStateToProps({activeAccount, Accounts}) {
+  return { activeAccount, Accounts };
 }
 
 export default connect(mapStateToProps)(Home);

@@ -3,25 +3,26 @@ import { connect } from 'react-redux';
 import { setActiveAccount } from '../actions/activeAccount';
 import { bindActionCreators } from 'redux';
 import { getAccounts } from '../actions/getAccounts';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { web3 } from '../web3Controller';
 
 class LoginForm extends Component {
-  handleSubmit (event) {
+  handleSubmit(event) {
     event.preventDefault();
     const forms = document.forms.accountEntry;
     const value = forms.accountInput.value;
     const account = this.props.Accounts.Accounts
     
+    if (account.indexOf(value) === -1) {
+      console.log('Error! Incorrect Account Number');
+      return;
+    }
     
-    // if (account.indexOf(value) === -1) {
-    //   console.log('Error!');
-    // }
-    
-   this.props.setActiveAccount(value);
+    this.props.setActiveAccount(value);
+    browserHistory.push('/');
   }
 
-  componentDidMount () {
+  componentDidMount() {
     if (!this.props.Accounts) {
       const accountPromise = new Promise(
         (resolve, reject) => {
@@ -35,8 +36,7 @@ class LoginForm extends Component {
     }
   }
 
-  render () {
-    console.log('Props on Login:', this.props);
+  render() {
     return (
       <div>
         <form name="accountEntry" onSubmit={this.handleSubmit.bind(this)}>
