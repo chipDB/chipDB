@@ -14,7 +14,11 @@ class Home extends Component {
   _createSchema() {
     const self = this;
     const eth = ethDb.deployed();
+    const eth2 = ethDb.deployed();
       eth.createSchema(['first','last','address'], {from: this.props.activeAccount, gas: 4700000}).then((val) => {
+      console.log('Return Schema: ', val);
+      });
+      eth2.createSchema(['first2','last2','address2'], {from: this.props.activeAccount, gas: 4700000}).then((val) => {
       console.log('Return Schema: ', val);
       });
   }
