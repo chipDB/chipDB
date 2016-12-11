@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import ethDb from '../../contracts/EthDb.sol';
 
 
-class Home extends Component {
+class Dashboard extends Component {
   componentDidMount() {
     this._createSchema();
   }
@@ -33,4 +33,4 @@ function mapStateToProps({activeAccount, Accounts}) {
   return { activeAccount, Accounts };
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Dashboard);
