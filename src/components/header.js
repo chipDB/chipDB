@@ -8,32 +8,32 @@ class Header extends Component {
    _handleSubmit(event) {
     event.preventDefault();
     this.props.setActiveAccount('');
-    browserHistory.push('/');
+    browserHistory.push('/login');
   }
   
   _authButton() {    
     if (this.props.activeAccount) {
-      return <button onClick={this._handleSubmit.bind(this)}>Sign Out</button>; 
-    }
-    
-    return <button>Sign In</button>;
-  }
-  
-  render() {
-    return (
-      <nav className="navbar navbar-light">
+      return (
         <ul className="nav navbar-nav">       
           <li className="nav-item">
             <Link to="/">Dashboard</Link>
           </li>
           <li className="nav-item">
-            <Link to="/login">Login</Link>
-          </li>
-          <li className="nav-item">
-            {this._authButton()}
+            <button onClick={this._handleSubmit.bind(this)}>Sign Out</button>
           </li>
         </ul>
-      </nav>
+      )
+    }
+  }
+  
+  render() {
+    return (
+      <div>
+        <nav className="navbar navbar-light">
+          <span>chipDB</span>
+          {this._authButton()}
+        </nav>
+      </div>
     )
   }
 }
