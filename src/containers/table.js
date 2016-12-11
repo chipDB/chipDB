@@ -1,22 +1,60 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setActiveAccount } from '../actions/activeAccount';
 import { Link } from 'react-router';
+import { getTableData } from '../actions/getTableData';
+import { bindActionCreators } from 'redux';
+import { web3, ethDb } from '../web3Controller';
 
 class Table extends Component {
+  componentDidMount() {
+    const eth = ethDb.deployed();
 
-  render () {
+    eth.readAll.call().then((value) => {
+      const result = value.reduce((acc, val, i, arr) => {
+          if(i % 3 === 0) acc.push([]);                 //get tablewith for 3
+          acc[acc.length - 1].push(web3.toAscii(val));
+          return acc;
+        }, []);
+      this.props.getTableData(result);
+    });
+  }
+
+  createRow() {
+
+  }
+
+  _renderHeader(data) {
+    console.log('predata',data);
+    if(!data.length) return;
+    return data[0].map( (ele, ind) => {
+      return <td key={ind}>{ele.toUpperCase()}</td>
+    });
+  }
+
+  render() {
     console.log('Props on Table:', this.props);
     return (
       <div>
-        <p>Insert Table</p>
+        <table className='table'>
+          <thead>
+            <tr>{}</tr>
+            <tr>{this._renderHeader(this.props.tableData.tableData)}</tr>
+          </thead>
+          <tbody>
+            {}
+          </tbody>
+        </table>
       </div>
     )
   }
 }
 
-function mapStateToProps({activeAccount}) {
-  return { activeAccount };
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getTableData }, dispatch);
 }
 
-export default connect(mapStateToProps)(Table);
+function mapStateToProps({ activeAccount, tableData }) {
+  return { activeAccount, tableData };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

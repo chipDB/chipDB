@@ -4,6 +4,7 @@ import { setActiveAccount } from '../actions/activeAccount';
 import { bindActionCreators } from 'redux';
 import { getAccounts } from '../actions/getAccounts';
 import { Link } from 'react-router';
+import { web3 } from '../web3Controller';
 
 class LoginForm extends Component {
   handleSubmit (event) {
@@ -24,7 +25,7 @@ class LoginForm extends Component {
     if (!this.props.Accounts) {
       const accountPromise = new Promise(
         (resolve, reject) => {
-          this.props.route.web3.eth.getAccounts((err, accs) => {
+          web3.eth.getAccounts((err, accs) => {
             if(err) return reject(err);
             resolve(accs);
           }) 
