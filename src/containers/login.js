@@ -6,6 +6,8 @@ import { getAccounts } from '../actions/getAccounts';
 import { Link, browserHistory } from 'react-router';
 import { web3 } from '../web3Controller';
 
+
+
 class LoginForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
@@ -38,8 +40,8 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <div>
-        <form name="accountEntry" onSubmit={this.handleSubmit.bind(this)}>
+      <div className="login">
+        <form className="form" name="accountEntry" onSubmit={this.handleSubmit.bind(this)}>
           <input name="accountInput"/>
           <button className="btn btn-default">Submit</button>
         </form>

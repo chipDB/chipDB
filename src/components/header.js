@@ -3,6 +3,10 @@ import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux'; 
 import { setActiveAccount } from '../actions/activeAccount';
 import { bindActionCreators } from 'redux';
+//import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+//import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+//import getMuiTheme from 'material-ui/styles/getMuiTheme';
+//import AppBar from 'material-ui/AppBar';
 
 class Header extends Component {
    _handleSubmit(event) {
@@ -16,11 +20,11 @@ class Header extends Component {
       return (
         <ul className="nav navbar-nav">       
           <li className="nav-item">
-            <Link to="/">Dashboard</Link>
+            <Link className="nav-link" to="/">Dashboard</Link>
           </li>
           <li className="nav-item">
-            <button onClick={this._handleSubmit.bind(this)}>Sign Out</button>
-          </li>
+            <Link className="nav-link float-md-right" onClick={this._handleSubmit.bind(this)}>Sign Out</Link>
+          </li> 
         </ul>
       )
     }
@@ -28,9 +32,9 @@ class Header extends Component {
   
   render() {
     return (
-      <div>
-        <nav className="navbar navbar-light">
-          <span>chipDB</span>
+      <div className="header">
+        <nav className="navbar navbar-dark">
+          <a className="navbar-brand">chipDB</a>
           {this._authButton()}
         </nav>
       </div>

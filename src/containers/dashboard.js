@@ -8,6 +8,8 @@ import ethDb from '../../contracts/EthDb.sol';
 
 class Dashboard extends Component {
   componentDidMount() {
+    var html = document.documentElement;
+    html.style.backgroundColor = 'white';
     this._createSchema();
   }
 

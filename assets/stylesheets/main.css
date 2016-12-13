@@ -1,0 +1,11 @@
+
+.login {
+  min-height: 1000px;
+  background: linear-gradient(rgba(20, 20, 20, .5), rgba(20, 20, 20, .5)), url('background.jpg');
+}
+
+.header {
+  background-color: #000;
+  color: #fff;
+}
+
