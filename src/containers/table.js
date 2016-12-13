@@ -8,8 +8,12 @@ import CrudTabs from '../components/crud.js';
 
 class Table extends Component {
   componentDidMount() {
-    const eth = ethDb.deployed();
 
+    this._readAll();
+  }
+
+  _readAll () {
+    const eth = ethDb.deployed();
     eth.readAll.call().then((value) => {
       const result = value.reduce((acc, val, i, arr) => {
           if(i % 3 === 0) acc.push([]);                 //get tablewith for 3
@@ -39,7 +43,7 @@ class Table extends Component {
           <tbody>
           </tbody>
         </table>
-        <CrudTabs />
+        <CrudTabs mainAccount={this.props.activeAccount} readAll={this._readAll.bind(this)}/>
       </div>
     )
   }
