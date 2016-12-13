@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getTableData } from '../actions/getTableData';
 import { bindActionCreators } from 'redux';
 import { web3, ethDb } from '../web3Controller';
+import CrudTabs from '../components/crud.js';
 
 class Table extends Component {
   componentDidMount() {
@@ -38,6 +39,7 @@ class Table extends Component {
           <tbody>
           </tbody>
         </table>
+        <CrudTabs />
       </div>
     )
   }
