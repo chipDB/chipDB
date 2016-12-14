@@ -91,13 +91,11 @@ export default class TabsExampleSwipeable extends React.Component {
           </div>
           <div style={styles.slide}>
             <h2 style={styles.headline}>Update</h2>
-            <Form schema={["search_column", "search_value", "column_to_update", "update_value"]} handleSubmit={this._updateRow.bind(this)}/>
-            slide n°2
+            <Form schema={["Search Column", "Search Value", "Column To Update", "Update Value"]} handleSubmit={this._updateRow.bind(this)}/>
           </div>
           <div style={styles.slide}>
             <h2 style={styles.headline}>Delete</h2>
-            <Form schema={["delete_column", "delete_value"]} handleSubmit={this._deleteRow.bind(this)}/>
-            slide n°3
+            <Form schema={["Delete Column", "Delete Value"]} handleSubmit={this._deleteRow.bind(this)}/>
           </div>
         </SwipeableViews>
       </div>
