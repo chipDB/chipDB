@@ -1,28 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
-import Web3 from 'web3'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { Router, browserHistory } from 'react-router';
+import ReduxPromise from 'redux-promise';
+import reducers from './reducers';
+import Routes from './routes';
 
-import './index.css'
+window.addEventListener('load', function() {
+  const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
-import truffleConfig from '../truffle.js'
-
-var web3Location = `http://${truffleConfig.rpc.host}:${truffleConfig.rpc.port}`
-
-window.addEventListener('load', function() {                    
-  var web3Provided;
-  // Supports Metamask and Mist, and other wallets that provide 'web3'.      
-  if (typeof web3 !== 'undefined') {                            
-    // Use the Mist/wallet provider.     
-    // eslint-disable-next-line                       
-    web3Provided = new Web3(web3.currentProvider);               
-  } else {                                                      
-    web3Provided = new Web3(new Web3.providers.HttpProvider(web3Location))
-  }   
-  
   ReactDOM.render(
-    <App web3={web3Provided} />,
+    <Provider store={createStoreWithMiddleware(reducers)}>
+      <Router history={browserHistory} routes={Routes}/>
+    </Provider>,
     document.getElementById('root')
-  )                                                                                                                    
+  );
 });
 

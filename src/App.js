@@ -1,18 +1,30 @@
-import React, { Component } from 'react'
-import './App.css'
+import React, { Component } from 'react';
+import Header from './components/header';
 
-//import AccountListContainer from 'components/AccountList/AccountListContainer'
-import EthDb from 'components/AccountList/ethDb'
 
-        //  <AccountListContainer web3={this.props.web3} />
+//import Login from './containers/login';
+//<AccountListContainer web3={this.props.web3} />
+//<Login web3={this.props.route.web3}/>
+/*<EthDb web3={this.props.web3} />*/
+
+// import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+// import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import AppBar from 'material-ui/AppBar';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
 class App extends Component {
-  render () {
+  render() {
     return (
-      <div className="App">
-        <EthDb web3={this.props.web3} />
-      </div>
+      <MuiThemeProvider>
+        <div>
+          <Header />
+          {this.props.children}
+        </div>
+      </MuiThemeProvider>
     )
   }
 }
 
-export default App
+export default App;
