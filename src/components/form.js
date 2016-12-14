@@ -10,7 +10,11 @@ class Form extends Component {
     })
     
     this.props.handleSubmit(array);
-}
+  }
+
+  _capitalizeWords(val) {
+    return val.replace(/(\b[a-z](?!\s))/g, (v) => v.toUpperCase());
+  }
   
   render() {
     console.log('schema', this.props.schema);
@@ -19,7 +23,7 @@ class Form extends Component {
       <form className='SendCoin'>
         {this.props.schema.map((value, ind)=> {
           return (<div>
-            <label htmlFor={value}>{value}</label>
+            <label htmlFor={value}>{this._capitalizeWords(value)}</label>
             <input id={value} type='text' ref={(i) => { if(i) { this[value] = i}}} />
           </div>)
         })}
