@@ -3,10 +3,12 @@ import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux'; 
 import { setActiveAccount } from '../actions/activeAccount';
 import { bindActionCreators } from 'redux';
-//import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-//import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-//import getMuiTheme from 'material-ui/styles/getMuiTheme';
-//import AppBar from 'material-ui/AppBar';
+
+// import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+// import getMuiTheme from 'material-ui/styles/getMuiTheme';
+// import AppBar from 'material-ui/AppBar';
+// <MuiThemeProvider>
 
 class Header extends Component {
    _handleSubmit(event) {
@@ -30,14 +32,15 @@ class Header extends Component {
     }
   }
   
+        //<AppBar />
   render() {
     return (
-      <div className="header">
-        <nav className="navbar navbar-dark">
-          <a className="navbar-brand">chipDB</a>
-          {this._authButton()}
-        </nav>
-      </div>
+        <div className="header">
+          <nav className="navbar navbar-dark">
+            <a className="navbar-brand">chipDB</a>
+            {this._authButton()}
+          </nav>
+        </div>
     )
   }
 }
