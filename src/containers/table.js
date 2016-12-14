@@ -31,8 +31,23 @@ class Table extends Component {
     });
   }
 
+  _renderBody(data) {
+    if(!data.length) return;
+    return data.map((row, ind) => {
+      if(!ind) { return; }
+      return (<tr>
+        {row.map((item, ind) => {
+          return <td key={ind}>{item}</td>
+        })}
+      </tr>)
+    });
+  }
+
   render() {
     console.log('Props on Table:', this.props);
+    if (!this.props.tableData) {
+      return;
+    }
     return (
       <div>
         <table className='table'>
@@ -41,9 +56,10 @@ class Table extends Component {
             <tr>{this._renderHeader(this.props.tableData.tableData)}</tr>
           </thead>
           <tbody>
+            {this._renderBody(this.props.tableData.tableData)}
           </tbody>
         </table>
-        <CrudTabs mainAccount={this.props.activeAccount} readAll={this._readAll.bind(this)}/>
+        <CrudTabs mainAccount={this.props.activeAccount} tableData={this.props.tableData.tableData} readAll={this._readAll.bind(this)}/>
       </div>
     )
   }
