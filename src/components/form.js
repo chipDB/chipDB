@@ -10,9 +10,6 @@ class Form extends Component {
     })
     
     this.props.handleSubmit(array);
-    // this.firstName.value = '';
-    // this.lastName.value = '';
-    // this.address.value = '';
 }
   
   render() {
@@ -34,15 +31,3 @@ class Form extends Component {
 }
 
 export default Form; 
-
-
-//  <form className='SendCoin'>
-//         <label htmlFor='first_name'>First Name</label>
-//         <input id='first_name' className='RecipientAddress' type='text' ref={(i)=>{ if(i) { this.firstName = i}}} />
-//         <label htmlFor='last_name'>Last Name</label>
-//         <input id='last_name' className='SendAmount' type='text' ref={(i) => { if(i) { this.lastName = i}}} />
-//         <label htmlFor='address'>Address</label>
-//         <input id='address' className='SendAmount' type='text' ref={(i) => { if(i) { this.address = i}}} />
-//         <br/>
-//         <button className='SendBtn' onClick={this._handleClick.bind(this)}>Send</button>
-//       </form>
