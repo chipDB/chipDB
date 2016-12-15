@@ -11,9 +11,11 @@ const styles = {
     paddingTop: 16,
     marginBottom: 12,
     fontWeight: 400,
+    textAlign: "center"
   },
   slide: {
     padding: 10,
+    textAlign: "center"
   },
 };
 
@@ -90,12 +92,9 @@ export default class TabsExampleSwipeable extends React.Component {
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
-          <div>
+          <div style={styles.slide}>
             <h2 style={styles.headline}>Create</h2>
-            
             <Form schema={this.props.tableData[0]} handleSubmit={this._createRow.bind(this)}/>
-
-
           </div>
           <div style={styles.slide}>
             <h2 style={styles.headline}>Update</h2>
