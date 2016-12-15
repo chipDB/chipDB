@@ -34,10 +34,18 @@ export default class TabsExampleSwipeable extends React.Component {
   //   this._updateRow(arr);
   // }
 
+  // _createRow(arr) {
+  //   const self = this;
+  //   const eth = ethDb.deployed();
+  //     eth.create(arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
+  //     console.log('Return Row: ', val);
+  //     this.props.readAll();
+  //     });
+  // }
   _createRow(arr) {
     const self = this;
     const eth = ethDb.deployed();
-      eth.create(arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
+      eth.createRow('table_a', arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
       console.log('Return Row: ', val);
       this.props.readAll();
       });
@@ -47,7 +55,7 @@ export default class TabsExampleSwipeable extends React.Component {
     const self = this;
     const eth = ethDb.deployed();
     console.log('update', arr);
-    eth.update(...arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
+    eth.updateTable('table_a', ...arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
       this.props.readAll();
     });
   }
@@ -55,7 +63,7 @@ export default class TabsExampleSwipeable extends React.Component {
   _deleteRow (arr) {
     const self = this;
     const eth = ethDb.deployed();
-      eth.remove(...arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
+      eth.removeRow('table_a', ...arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
         this.props.readAll();
       });
   }

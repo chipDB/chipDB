@@ -14,7 +14,7 @@ class Table extends Component {
 
   _readAll () {
     const eth = ethDb.deployed();
-    eth.readAll.call().then((value) => {
+    eth.readTable.call('table_a').then((value) => {
       const result = value.reduce((acc, val, i, arr) => {
           if(i % 3 === 0) acc.push([]);                 //get tablewith for 3
           acc[acc.length - 1].push(web3.toAscii(val));
@@ -23,6 +23,17 @@ class Table extends Component {
       this.props.getTableData(result);
     });
   }
+  // _readAll () {
+  //   const eth = ethDb.deployed();
+  //   eth.readAll.call().then((value) => {
+  //     const result = value.reduce((acc, val, i, arr) => {
+  //         if(i % 3 === 0) acc.push([]);                 //get tablewith for 3
+  //         acc[acc.length - 1].push(web3.toAscii(val));
+  //         return acc;
+  //       }, []);
+  //     this.props.getTableData(result);
+  //   });
+  // }
 
   _renderHeader(data) {
     if(!data.length) return;
