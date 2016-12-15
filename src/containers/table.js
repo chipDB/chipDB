@@ -5,8 +5,9 @@ import { getTableData } from '../actions/getTableData';
 import { bindActionCreators } from 'redux';
 import { web3, ethDb } from '../web3Controller';
 import CrudTabs from '../components/crud.js';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
-class Table extends Component {
+class RenderedTable extends Component {
   componentDidMount() {
 
     this._readAll();
@@ -38,7 +39,7 @@ class Table extends Component {
   _renderHeader(data) {
     if(!data.length) return;
     return data[0].map((el, ind) => {
-      return <td key={ind}>{el.toUpperCase()}</td>
+      return <TableHeaderColumn key={ind}>{el.toUpperCase()}</TableHeaderColumn>
     });
   }
 
@@ -46,11 +47,11 @@ class Table extends Component {
     if(!data.length) return;
     return data.map((row, ind) => {
       if(!ind) { return; }
-      return (<tr>
+      return (<TableRow>
         {row.map((item, ind) => {
-          return <td key={ind}>{item}</td>
+          return <TableRowColumn key={ind}>{item}</TableRowColumn>
         })}
-      </tr>)
+      </TableRow>)
     });
   }
 
@@ -61,15 +62,15 @@ class Table extends Component {
     }
     return (
       <div>
-        <table className='table'>
-          <thead>
-            <tr></tr>
-            <tr>{this._renderHeader(this.props.tableData.tableData)}</tr>
-          </thead>
-          <tbody>
+        <Table className='table'>
+          <TableHeader>
+            <TableRow></TableRow>
+            <TableRow>{this._renderHeader(this.props.tableData.tableData)}</TableRow>
+          </TableHeader>
+          <TableBody>
             {this._renderBody(this.props.tableData.tableData)}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
         <CrudTabs mainAccount={this.props.activeAccount} tableData={this.props.tableData.tableData} readAll={this._readAll.bind(this)}/>
       </div>
     )
@@ -84,4 +85,4 @@ function mapStateToProps({ activeAccount, tableData }) {
   return { activeAccount, tableData };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Table);
+export default connect(mapStateToProps, mapDispatchToProps)(RenderedTable);
