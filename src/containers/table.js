@@ -9,32 +9,29 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 
 class RenderedTable extends Component {
   componentDidMount() {
-
-    this._readAll();
+    this._getTableWidth();
   }
 
-  _readAll () {
+  _getTableWidth(){
+    const eth = ethDb.deployed();
+    eth.getTblWidth.call('table_a').then((val) => { //make table name dynamic
+      console.log('lengthReturn', val.valueOf());
+      this._readAll(val.valueOf());
+    });
+
+  }
+
+  _readAll (width) {
     const eth = ethDb.deployed();
     eth.readTable.call('table_a').then((value) => {
       const result = value.reduce((acc, val, i, arr) => {
-          if(i % 3 === 0) acc.push([]);                 //get tablewith for 3
+          if(i % width === 0) acc.push([]);                 //get tablewith for 3
           acc[acc.length - 1].push(web3.toAscii(val));
           return acc;
         }, []);
       this.props.getTableData(result);
     });
   }
-  // _readAll () {
-  //   const eth = ethDb.deployed();
-  //   eth.readAll.call().then((value) => {
-  //     const result = value.reduce((acc, val, i, arr) => {
-  //         if(i % 3 === 0) acc.push([]);                 //get tablewith for 3
-  //         acc[acc.length - 1].push(web3.toAscii(val));
-  //         return acc;
-  //       }, []);
-  //     this.props.getTableData(result);
-  //   });
-  // }
 
   _renderHeader(data) {
     if(!data.length) return;
@@ -71,7 +68,7 @@ class RenderedTable extends Component {
             {this._renderBody(this.props.tableData.tableData)}
           </TableBody>
         </Table>
-        <CrudTabs mainAccount={this.props.activeAccount} tableData={this.props.tableData.tableData} readAll={this._readAll.bind(this)}/>
+        <CrudTabs mainAccount={this.props.activeAccount} tableData={this.props.tableData.tableData} readAll={this._getTableWidth.bind(this)}/>
       </div>
     )
   }
