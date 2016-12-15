@@ -40,6 +40,12 @@ contract EthDb {
 
   // Create table
   function createTable (bytes32 tableName, bytes32[] schema, bytes32[] dataTypes) {
+    for (uint i = 0; i < tableNames.length; i++) {
+      if (tableName == tableNames[i]) {
+        return;
+      }
+    }
+
     tableNames.push(tableName);
     tables[tableName].push(schema);
     tables[tableName].push(dataTypes);
