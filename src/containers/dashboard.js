@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //import { setActiveAccount } from '../actions/activeAccount';
 //import { getAccounts } from '../actions/getAccounts';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import ethDb from '../../contracts/EthDb.sol';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -10,6 +10,9 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
+import { getTableName } from '../actions/getTableName';
+import { bindActionCreators } from 'redux';
+
 
 
     var schema = {
@@ -68,9 +71,9 @@ class Dashboard extends Component {
     const eth = ethDb.deployed();
     console.log(tableName, submitSchema, dataTypes);
     eth.createTable(tableName, submitSchema, dataTypes, {from: this.props.activeAccount, gas: 4700000}).then((val) => {
-      console.log('Return Schema: ', val);
+      this.props.getTableName(tableName);
+      browserHistory.push(`/${tableName}`);
     });
-
   }
 
   _handleChange = (i, event, ind, val) => {
@@ -118,8 +121,12 @@ class Dashboard extends Component {
   }
 }
 
-function mapStateToProps({activeAccount, Accounts}) {
-  return { activeAccount, Accounts };
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({getTableName}, dispatch);
 }
 
-export default connect(mapStateToProps)(Dashboard);
+function mapStateToProps({activeAccount, Accounts, tableName}) {
+  return { activeAccount, Accounts, tableName };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
