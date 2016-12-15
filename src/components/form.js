@@ -24,11 +24,21 @@ class Form extends Component {
         {this.props.schema.map((value, ind)=> {
           return (<div>
             <label htmlFor={value}>{this._capitalizeWords(value)}</label>
-            <input id={value} type='text' ref={(i) => { if(i) { this[value] = i}}} />
+            <input
+              id={value}
+              type='text'
+              ref={(i) => { if(i) { this[value] = i}}}
+            />
           </div>)
         })}
         <br/>
-        <button className='SendBtn' onClick={this._handleClick.bind(this)}>Send</button>
+        <button
+          className='SendBtn'
+          onClick={this._handleClick.bind(this)}
+          style={{textAlign: "center"}}
+        >
+          Send
+        </button>
       </form>
     )
   }
