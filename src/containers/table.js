@@ -14,7 +14,7 @@ class RenderedTable extends Component {
 
   _getTableWidth(){
     const eth = ethDb.deployed();
-    eth.getTblWidth.call(this.props.tableName.tableName).then((val) => { //make table name dynamic
+    eth.getTblWidth.call(this.props.params.table).then((val) => { //make table name dynamic
       console.log('lengthReturn', val.valueOf());
       this._readAll(val.valueOf());
     });
@@ -23,7 +23,7 @@ class RenderedTable extends Component {
 
   _readAll (width) {
     const eth = ethDb.deployed();
-    eth.readTable.call(this.props.tableName.tableName).then((value) => {
+    eth.readTable.call(this.props.params.table).then((value) => {
       const result = value.reduce((acc, val, i, arr) => {
           if(i % width === 0) acc.push([]);
           acc[acc.length - 1].push(web3.toAscii(val));
@@ -60,6 +60,8 @@ class RenderedTable extends Component {
   }
 
   render() {
+    console.log('params', this.props.params);
+    console.log('tableName', this.props.tableName);
     console.log('Props on Table:', this.props);
     if (!this.props.tableData) {
       return;
@@ -79,7 +81,7 @@ class RenderedTable extends Component {
           mainAccount={this.props.activeAccount}
           tableData={this.props.tableData.tableData}
           readAll={this._getTableWidth.bind(this)}
-          tableName={this.props.tableName.tableName}
+          tableName={this.props.params.table}
           />
       </div>
     )
