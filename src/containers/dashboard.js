@@ -92,16 +92,6 @@ class Dashboard extends Component {
   componentDidMount() {
     var html = document.documentElement;
     html.style.backgroundColor = 'white';
-  //  this._createSchema();
-  }
-
-  _createSchema() {
-    const eth = ethDb.deployed();
-    
-    eth.createTable('table_a', ['first','last','address'], ['string','string','string'], {from: this.props.activeAccount, gas: 4700000}).then((val) => {
-      console.log('Return Schema: ', val);
-    });
-
   }
 
   render () {
