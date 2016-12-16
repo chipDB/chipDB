@@ -108,7 +108,7 @@ class Dashboard extends Component {
     return (
       <div>
         <RaisedButton label={<Link to='/table'>Table</Link>} />
-        <RaisedButton label="New Table" keyboardFocused={true} onClick={this._handleToggle} />
+        <RaisedButton label="New Table" onClick={this._handleToggle} />
         <Dialog open={this.state.open} width={300}>
           <TextField id="tableName" hintText="Table name"/>      
           <AppBar title="Create Schema" onClick={this._handleToggle} />
