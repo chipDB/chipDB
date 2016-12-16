@@ -39,11 +39,37 @@ class RenderedTable extends Component {
   _readAll (width) {
     const eth = ethDb.deployed();
     eth.readTable.call(this.props.params.table).then((value) => {
-      const result = value.reduce((acc, val, i, arr) => {
+       let result = value.reduce((acc, val, i, arr) => {
           if(i % width === 0) acc.push([]);
           acc[acc.length - 1].push(web3.toAscii(val).slice(1));
           return acc;
         }, []);
+
+      result = result.map((row, ind) => {
+        if (ind < 2) { return row; }
+        return row.map((val, ind) => {
+          const type = result[1][ind];
+          if (type === 'Number') {
+            console.log('number');
+            console.log(typeof +val);
+            return +val;
+          }
+
+          if (type === 'Datetime') {
+            console.log('date');
+            console.log(typeof new Date(val));
+            return new Date(val);
+          }
+
+          if (type === 'Boolean') {
+            console.log('boolean');
+            console.log(typeof val === 'true');
+            return val === 'true';
+          }
+
+          return val;
+        })
+      })
       this.props.getTableData(result);
     });
   }
