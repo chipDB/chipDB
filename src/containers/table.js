@@ -21,12 +21,27 @@ class RenderedTable extends Component {
 
   }
 
+  _convert(hex) {
+   var str = '',
+       i = 0,
+       l = hex.length;
+   if (hex.substring(0, 2) === '0x') {
+       i = 2;
+   }
+   for (; i < l; i+=2) {
+       var code = parseInt(hex.substr(i, 2), 16);
+       if (code === 0) continue; // this is added
+       str += String.fromCharCode(code);
+   }
+   return str;
+  }
+
   _readAll (width) {
     const eth = ethDb.deployed();
     eth.readTable.call(this.props.params.table).then((value) => {
       const result = value.reduce((acc, val, i, arr) => {
           if(i % width === 0) acc.push([]);
-          acc[acc.length - 1].push(web3.toAscii(val));
+          acc[acc.length - 1].push(web3.toAscii(val).slice(1));
           return acc;
         }, []);
       this.props.getTableData(result);

@@ -61,9 +61,9 @@ class Dashboard extends Component {
  };
 
   _submitTable = () => {
-    const dataTypes = this.state.val.map( v => schema[v]);
+    const dataTypes = this.state.val.map( v => '_' + schema[v]);
     const submitSchema = this.state.schema.map( ele => {
-    return document.getElementById('text' + ele).value;
+    return '_' + document.getElementById('text' + ele).value;
     });
     const tableName = document.getElementById('tableName').value;
     const eth = ethDb.deployed();
