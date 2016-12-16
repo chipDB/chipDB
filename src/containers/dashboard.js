@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 //import { setActiveAccount } from '../actions/activeAccount';
 //import { getAccounts } from '../actions/getAccounts';
 import { Link, browserHistory } from 'react-router';
-import ethDb from '../../contracts/EthDb.sol';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
@@ -12,8 +11,7 @@ import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 import { getTableName } from '../actions/getTableName';
 import { bindActionCreators } from 'redux';
-
-
+import { web3, ethDb } from '../web3Controller';
 
     var schema = {
       '1': "String",
@@ -71,7 +69,6 @@ class Dashboard extends Component {
     const eth = ethDb.deployed();
     console.log(tableName, submitSchema, dataTypes);
     eth.createTable(tableName, submitSchema, dataTypes, {from: this.props.activeAccount, gas: 4700000}).then((val) => {
-      this.props.getTableName(tableName);
       browserHistory.push(`/${tableName}`);
     });
   }
@@ -92,10 +89,19 @@ class Dashboard extends Component {
   componentDidMount() {
     var html = document.documentElement;
     html.style.backgroundColor = 'white';
+
+    const eth = ethDb.deployed();
+    eth.getTableNames.call().then(tableNamesArray => {
+      const tableNames = tableNamesArray.map(val => web3.toAscii(val));
+
+      console.log('tableName', tableNames);
+      this.props.getTableName(tableNames);
+    });
   }
 
   render () {
     console.log('browserHistory', browserHistory.getCurrentLocation());
+    console.log('tableName render', this.props.tableName.tableName);
     return (
       <div>
         {this.props.tableName.tableName.map((tbl) => <RaisedButton label={<Link to={`/${tbl}`}>{tbl}</Link>} />)}

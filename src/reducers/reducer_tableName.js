@@ -7,9 +7,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case TABLE_NAME:
-      const stateClone = Object.assign({}, state);
-      stateClone.tableName.push(action.payload);
-      return stateClone;
+      return Object.assign({}, state, { tableName: action.payload });
     default: return state;
   }
 }
