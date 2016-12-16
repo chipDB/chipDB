@@ -95,9 +95,10 @@ class Dashboard extends Component {
   }
 
   render () {
+    console.log('browserHistory', browserHistory.getCurrentLocation());
     return (
       <div>
-        <RaisedButton label={<Link to='/table'>Table</Link>} />
+        {this.props.tableName.tableName.map((tbl) => <RaisedButton label={<Link to={`/${tbl}`}>{tbl}</Link>} />)}
         <RaisedButton label="New Table" onClick={this._handleToggle} />
         <Dialog open={this.state.open} width={300}>
           <TextField id="tableName" hintText="Table name"/>      
