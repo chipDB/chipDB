@@ -14,7 +14,7 @@ class RenderedTable extends Component {
 
   _getTableWidth(){
     const eth = ethDb.deployed();
-    eth.getTblWidth.call('table_a').then((val) => { //make table name dynamic
+    eth.getTblWidth.call(this.props.tableName.tableName).then((val) => { //make table name dynamic
       console.log('lengthReturn', val.valueOf());
       this._readAll(val.valueOf());
     });
@@ -23,9 +23,9 @@ class RenderedTable extends Component {
 
   _readAll (width) {
     const eth = ethDb.deployed();
-    eth.readTable.call('table_a').then((value) => {
+    eth.readTable.call(this.props.tableName.tableName).then((value) => {
       const result = value.reduce((acc, val, i, arr) => {
-          if(i % width === 0) acc.push([]);                 //get tablewith for 3
+          if(i % width === 0) acc.push([]);
           acc[acc.length - 1].push(web3.toAscii(val));
           return acc;
         }, []);
@@ -40,10 +40,17 @@ class RenderedTable extends Component {
     });
   }
 
+  _renderSchema(data) {
+    if(!data.length) return;
+    return data[1].map((el, ind) => {
+      return <TableHeaderColumn key={"schema" + ind}>{el.toUpperCase()}</TableHeaderColumn>
+    });
+  }
+
   _renderBody(data) {
     if(!data.length) return;
     return data.map((row, ind) => {
-      if(!ind) { return; }
+      if(ind < 2) { return; }
       return (<TableRow>
         {row.map((item, ind) => {
           return <TableRowColumn key={ind}>{item}</TableRowColumn>
@@ -61,14 +68,19 @@ class RenderedTable extends Component {
       <div>
         <Table className='table'>
           <TableHeader>
-            <TableRow></TableRow>
             <TableRow>{this._renderHeader(this.props.tableData.tableData)}</TableRow>
+            <TableRow>{this._renderSchema(this.props.tableData.tableData)}</TableRow>
           </TableHeader>
           <TableBody>
             {this._renderBody(this.props.tableData.tableData)}
           </TableBody>
         </Table>
-        <CrudTabs mainAccount={this.props.activeAccount} tableData={this.props.tableData.tableData} readAll={this._getTableWidth.bind(this)}/>
+        <CrudTabs
+          mainAccount={this.props.activeAccount}
+          tableData={this.props.tableData.tableData}
+          readAll={this._getTableWidth.bind(this)}
+          tableName={this.props.tableName.tableName}
+          />
       </div>
     )
   }
@@ -78,8 +90,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ getTableData }, dispatch);
 }
 
-function mapStateToProps({ activeAccount, tableData }) {
-  return { activeAccount, tableData };
+function mapStateToProps({ activeAccount, tableData, tableName }) {
+  return { activeAccount, tableData, tableName };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenderedTable);

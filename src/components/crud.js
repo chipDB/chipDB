@@ -11,9 +11,11 @@ const styles = {
     paddingTop: 16,
     marginBottom: 12,
     fontWeight: 400,
+    textAlign: "center"
   },
   slide: {
     padding: 10,
+    textAlign: "center"
   },
 };
 
@@ -45,7 +47,7 @@ export default class TabsExampleSwipeable extends React.Component {
   _createRow(arr) {
     const self = this;
     const eth = ethDb.deployed();
-      eth.createRow('table_a', arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
+      eth.createRow(this.props.tableName, arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
       console.log('Return Row: ', val);
       this.props.readAll();
       });
@@ -55,7 +57,7 @@ export default class TabsExampleSwipeable extends React.Component {
     const self = this;
     const eth = ethDb.deployed();
     console.log('update', arr);
-    eth.updateTable('table_a', ...arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
+    eth.updateTable(this.props.tableName, ...arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
       this.props.readAll();
     });
   }
@@ -63,7 +65,7 @@ export default class TabsExampleSwipeable extends React.Component {
   _deleteRow (arr) {
     const self = this;
     const eth = ethDb.deployed();
-      eth.removeRow('table_a', ...arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
+      eth.removeRow(this.props.tableName, ...arr, {from: this.props.mainAccount, gas: 4700000}).then((val) => {
         this.props.readAll();
       });
   }
@@ -90,12 +92,9 @@ export default class TabsExampleSwipeable extends React.Component {
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
-          <div>
+          <div style={styles.slide}>
             <h2 style={styles.headline}>Create</h2>
-            
             <Form schema={this.props.tableData[0]} handleSubmit={this._createRow.bind(this)}/>
-
-
           </div>
           <div style={styles.slide}>
             <h2 style={styles.headline}>Update</h2>
