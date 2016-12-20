@@ -1,7 +1,7 @@
 import { TABLE_NAME } from '../actions/getTableName';
 
 const initialState = {
-  tableName: ''
+  tableName: []
 };
 
 export default function(state = initialState, action) {

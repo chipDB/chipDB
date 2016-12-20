@@ -14,21 +14,62 @@ class RenderedTable extends Component {
 
   _getTableWidth(){
     const eth = ethDb.deployed();
-    eth.getTblWidth.call(this.props.tableName.tableName).then((val) => { //make table name dynamic
+    eth.getTblWidth.call(this.props.params.table).then((val) => { //make table name dynamic
       console.log('lengthReturn', val.valueOf());
       this._readAll(val.valueOf());
     });
 
   }
 
+  _convert(hex) {
+   var str = '',
+       i = 0,
+       l = hex.length;
+   if (hex.substring(0, 2) === '0x') {
+       i = 2;
+   }
+   for (; i < l; i+=2) {
+       var code = parseInt(hex.substr(i, 2), 16);
+       if (code === 0) continue; // this is added
+       str += String.fromCharCode(code);
+   }
+   return str;
+  }
+
   _readAll (width) {
     const eth = ethDb.deployed();
-    eth.readTable.call(this.props.tableName.tableName).then((value) => {
-      const result = value.reduce((acc, val, i, arr) => {
+    eth.readTable.call(this.props.params.table).then((value) => {
+       let result = value.reduce((acc, val, i, arr) => {
           if(i % width === 0) acc.push([]);
-          acc[acc.length - 1].push(web3.toAscii(val));
+          acc[acc.length - 1].push(web3.toAscii(val).slice(1));
           return acc;
         }, []);
+
+      result = result.map((row, ind) => {
+        if (ind < 2) { return row; }
+        return row.map((val, ind) => {
+          const type = result[1][ind];
+          if (type === 'Number') {
+            console.log('number');
+            console.log(typeof +val);
+            return +val;
+          }
+
+          if (type === 'Datetime') {
+            console.log('date');
+            console.log(typeof new Date(val));
+            return new Date(val);
+          }
+
+          if (type === 'Boolean') {
+            console.log('boolean');
+            console.log(typeof val === 'true');
+            return val === 'true';
+          }
+
+          return val;
+        })
+      })
       this.props.getTableData(result);
     });
   }
@@ -60,6 +101,8 @@ class RenderedTable extends Component {
   }
 
   render() {
+    console.log('params', this.props.params);
+    console.log('tableName', this.props.tableName);
     console.log('Props on Table:', this.props);
     if (!this.props.tableData) {
       return;
@@ -79,7 +122,7 @@ class RenderedTable extends Component {
           mainAccount={this.props.activeAccount}
           tableData={this.props.tableData.tableData}
           readAll={this._getTableWidth.bind(this)}
-          tableName={this.props.tableName.tableName}
+          tableName={this.props.params.table}
           />
       </div>
     )
