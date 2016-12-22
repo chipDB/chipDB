@@ -6,8 +6,6 @@ import { getAccounts } from '../actions/getAccounts';
 import { Link, browserHistory } from 'react-router';
 import { web3 } from '../web3Controller';
 
-
-
 class LoginForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
@@ -16,7 +14,6 @@ class LoginForm extends Component {
     const account = this.props.Accounts.Accounts
     
     if (account.indexOf(value) === -1) {
-      console.log('Error! Incorrect Account Number');
       return;
     }
     
