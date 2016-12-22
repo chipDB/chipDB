@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-//import { Link } from 'react-router';
 import { getTableData } from '../actions/getTableData';
 import { bindActionCreators } from 'redux';
-import { web3, ethDb } from '../web3Controller';
+import { web3, Tomos } from '../web3Controller';
 import CrudTabs from '../components/crud.js';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
@@ -13,9 +12,8 @@ class RenderedTable extends Component {
   }
 
   _getTableWidth(){
-    const eth = ethDb.deployed();
-    eth.getTblWidth.call(this.props.params.table).then((val) => { //make table name dynamic
-      console.log('lengthReturn', val.valueOf());
+    const tomos = Tomos.deployed();
+    tomos.getTblWidth.call(this.props.params.table).then((val) => { 
       this._readAll(val.valueOf());
     });
 
@@ -30,15 +28,15 @@ class RenderedTable extends Component {
    }
    for (; i < l; i+=2) {
        var code = parseInt(hex.substr(i, 2), 16);
-       if (code === 0) continue; // this is added
+       if (code === 0) continue;
        str += String.fromCharCode(code);
    }
    return str;
   }
 
   _readAll (width) {
-    const eth = ethDb.deployed();
-    eth.readTable.call(this.props.params.table).then((value) => {
+    const tomos = Tomos.deployed();
+    tomos.readTable.call(this.props.params.table).then((value) => {
        let result = value.reduce((acc, val, i, arr) => {
           if(i % width === 0) acc.push([]);
           acc[acc.length - 1].push(web3.toAscii(val).slice(1));
@@ -50,20 +48,14 @@ class RenderedTable extends Component {
         return row.map((val, ind) => {
           const type = result[1][ind];
           if (type === 'Number') {
-            console.log('number');
-            console.log(typeof +val);
             return +val;
           }
 
           if (type === 'Datetime') {
-            console.log('date');
-            console.log(typeof new Date(val));
             return new Date(val);
           }
 
           if (type === 'Boolean') {
-            console.log('boolean');
-            console.log(typeof val === 'true');
             return val === 'true';
           }
 
@@ -92,7 +84,7 @@ class RenderedTable extends Component {
     if(!data.length) return;
     return data.map((row, ind) => {
       if(ind < 2) { return; }
-      return (<TableRow>
+      return (<TableRow key={ind}>
         {row.map((item, ind) => {
           return <TableRowColumn key={ind}>{item}</TableRowColumn>
         })}
@@ -101,9 +93,6 @@ class RenderedTable extends Component {
   }
 
   render() {
-    console.log('params', this.props.params);
-    console.log('tableName', this.props.tableName);
-    console.log('Props on Table:', this.props);
     if (!this.props.tableData) {
       return;
     }

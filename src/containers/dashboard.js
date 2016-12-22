@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-//import { setActiveAccount } from '../actions/activeAccount';
-//import { getAccounts } from '../actions/getAccounts';
 import { Link, browserHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -11,14 +9,15 @@ import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 import { getTableName } from '../actions/getTableName';
 import { bindActionCreators } from 'redux';
-import { web3, ethDb } from '../web3Controller';
+import { web3, Tomos } from '../web3Controller';
 
-    var schema = {
-      '1': "String",
-      '2': "Boolean",
-      '3': "Number",
-      '4': "Datetime"
-    }
+const schema = {
+  '1': "String",
+  '2': "Boolean",
+  '3': "Number",
+  '4': "Datetime"
+}
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -63,12 +62,11 @@ class Dashboard extends Component {
   _submitTable = () => {
     const dataTypes = this.state.val.map( v => '_' + schema[v]);
     const submitSchema = this.state.schema.map( ele => {
-    return '_' + document.getElementById('text' + ele).value;
+      return '_' + document.getElementById('text' + ele).value;
     });
     const tableName = document.getElementById('tableName').value;
-    const eth = ethDb.deployed();
-    console.log(tableName, submitSchema, dataTypes);
-    eth.createTable(tableName, submitSchema, dataTypes, {from: this.props.activeAccount, gas: 4700000}).then((val) => {
+    const tomos = Tomos.deployed();
+    tomos.createTable(tableName, submitSchema, dataTypes, {from: this.props.activeAccount, gas: 4700000}).then((val) => {
       browserHistory.push(`/${tableName}`);
     });
   }
@@ -90,21 +88,17 @@ class Dashboard extends Component {
     var html = document.documentElement;
     html.style.backgroundColor = 'white';
 
-    const eth = ethDb.deployed();
-    eth.getTableNames.call().then(tableNamesArray => {
+    const tomos = Tomos.deployed();
+    tomos.getTableNames.call().then(tableNamesArray => {
       const tableNames = tableNamesArray.map(val => web3.toAscii(val));
-
-      console.log('tableName', tableNames);
       this.props.getTableName(tableNames);
     });
   }
 
   render () {
-    console.log('browserHistory', browserHistory.getCurrentLocation());
-    console.log('tableName render', this.props.tableName.tableName);
     return (
       <div>
-        {this.props.tableName.tableName.map((tbl) => <RaisedButton label={<Link to={`/${tbl}`}>{tbl}</Link>} />)}
+        {this.props.tableName.tableName.map((tbl, ind) => <RaisedButton key={ind} label={<Link to={`/${tbl}`}>{tbl}</Link>} />)}
         <RaisedButton label="New Table" onClick={this._handleToggle} />
         <Dialog open={this.state.open} width={300}>
           <TextField id="tableName" hintText="Table name"/>      

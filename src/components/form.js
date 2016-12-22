@@ -17,12 +17,11 @@ class Form extends Component {
   }
   
   render() {
-    console.log('schema', this.props.schema);
     if (!this.props.schema) { return null };
     return (
       <form className='SendCoin'>
         {this.props.schema.map((value, ind)=> {
-          return (<div>
+          return (<div key={ind}>
             <label htmlFor={value}>{this._capitalizeWords(value)}</label>
             <input
               id={value}
